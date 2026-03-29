@@ -1,0 +1,9 @@
+flask
+opencv-python
+numpy
+shapely
+matplotlib
+networkx
+openai
+python-dotenv
+trimesh
