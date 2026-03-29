@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StructoX — AI Structural Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div class="container">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-icon"><i class="fa-solid fa-building-columns"></i></span>
+      <span class="logo-text">StructoX</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" data-section="upload">
+        <i class="fa-solid fa-upload"></i><span>Upload</span>
+      </button>
+      <button class="nav-btn" data-section="analysis">
+        <i class="fa-solid fa-chart-bar"></i><span>Analysis</span>
+      </button>
+      <button class="nav-btn" data-section="materials">
+        <i class="fa-solid fa-cubes"></i><span>Materials</span>
+      </button>
+      <button class="nav-btn" data-section="report">
+        <i class="fa-solid fa-file-lines"></i><span>Report</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">v2.0</div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="page-title" id="page-title">Floor Plan Analyzer</span>
+      </div>
+      <div class="topbar-right">
+        <input class="search" id="search-input" placeholder="Search or ask about the plan…"/>
+        <button class="mic-btn" id="mic-btn" title="Voice input">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <div class="avatar">AI</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- ── UPLOAD SECTION ── -->
+      <section id="section-upload" class="section active">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-drafting-compass"></i> Upload Floor Plan</h2>
+            <p>Drop an architectural image — StructoX will detect walls, rooms, junctions & openings.</p>
+          </div>
+
+          <div class="upload-box" id="drop-zone">
+            <div class="upload-icon"><i class="fa-solid fa-image"></i></div>
+            <p class="upload-title">Drag & Drop your floor plan</p>
+            <p class="upload-sub">PNG, JPG, BMP, TIFF — up to 20 MB</p>
+            <input type="file" id="file-input" accept="image/*" hidden/>
+            <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+              <i class="fa-solid fa-folder-open"></i> Choose File
+            </button>
+            <div class="upload-preview-wrap" id="preview-wrap" style="display:none">
+              <img id="preview-orig" class="preview-img" alt="Original"/>
+              <div class="preview-label">Original</div>
+            </div>
+          </div>
+
+          <div id="status-bar" class="status-bar" style="display:none">
+            <div class="status-spinner"><i class="fa-solid fa-gear fa-spin"></i></div>
+            <span id="status-text">Processing…</span>
+          </div>
+        </div>
+
+        <!-- Processed result -->
+        <div class="card result-card" id="result-card" style="display:none">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-microscope"></i> Processed Result</h2>
+          </div>
+          <div class="result-grid">
+            <div class="result-image-wrap">
+              <img id="preview-processed" class="preview-img large" alt="Processed"/>
+              <div class="preview-label">Annotated — walls, rooms & junctions highlighted</div>
+            </div>
+            <div class="quick-stats" id="quick-stats"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ANALYSIS SECTION ── -->
+      <section id="section-analysis" class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-chart-bar"></i> Structural Analysis</h2>
+            <p>Detailed breakdown of detected structural elements.</p>
+          </div>
+          <div id="analysis-content">
+            <div class="empty-state">
+              <i class="fa-solid fa-upload"></i>
+              <p>Upload a floor plan to see analysis</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── MATERIALS SECTION ── -->
+      <section id="section-materials" class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-cubes"></i> Material Recommendations</h2>
+            <p>Suggested materials based on structural analysis.</p>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Component</th><th>Material</th><th>Spec</th><th>Cost</th><th>Tag</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><i class="fa-solid fa-wall-brick" style="color:#e76f3b"></i> Load Bearing Wall</td>
+                <td>Red Brick (IS:1077)</td><td>230mm thick</td><td>₹280/sq.ft</td>
+                <td><span class="tag tag-green">Best Value</span></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-border-all" style="color:#3b82f6"></i> Partition Wall</td>
+                <td>AAC Blocks</td><td>100mm thick</td><td>₹210/sq.ft</td>
+                <td><span class="tag tag-blue">Lightweight</span></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-layer-group" style="color:#8b5cf6"></i> Floor Slab</td>
+                <td>RCC M25</td><td>125mm thick</td><td>₹420/sq.ft</td>
+                <td><span class="tag tag-purple">High Strength</span></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-lines-leaning" style="color:#f59e0b"></i> Columns</td>
+                <td>RCC M30</td><td>300×300mm</td><td>₹580/rmt</td>
+                <td><span class="tag tag-yellow">Structural</span></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-ruler-combined" style="color:#10b981"></i> Beam</td>
+                <td>RCC M25</td><td>230×450mm</td><td>₹490/rmt</td>
+                <td><span class="tag tag-green">Standard</span></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-house-chimney" style="color:#ef4444"></i> Roof</td>
+                <td>RCC Flat Slab</td><td>150mm thick</td><td>₹450/sq.ft</td>
+                <td><span class="tag tag-red">Fire Safe</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── REPORT SECTION ── -->
+      <section id="section-report" class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-file-lines"></i> Structural Report</h2>
+            <p>Auto-generated summary report from latest analysis.</p>
+          </div>
+          <div id="report-content">
+            <div class="empty-state">
+              <i class="fa-solid fa-upload"></i>
+              <p>Upload a floor plan to generate report</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /container -->
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>
