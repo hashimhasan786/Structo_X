@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StructoX — Autonomous Structural Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+<!-- ══ Sidebar ══════════════════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">SX</div>
+    <div class="logo-name">StructoX<span class="logo-ver">v2.0</span></div>
+  </div>
+
+  <nav class="nav-stack">
+    <button class="nav-item active" data-tab="upload">
+      <i class="fa-solid fa-upload"></i><span>Upload</span>
+    </button>
+    <button class="nav-item" data-tab="parse">
+      <i class="fa-solid fa-vector-square"></i><span>Stage 1 · Parse</span>
+    </button>
+    <button class="nav-item" data-tab="geometry">
+      <i class="fa-solid fa-diagram-project"></i><span>Stage 2 · Geometry</span>
+    </button>
+    <button class="nav-item" data-tab="model3d">
+      <i class="fa-solid fa-cube"></i><span>Stage 3 · 3D Model</span>
+    </button>
+    <button class="nav-item" data-tab="materials">
+      <i class="fa-solid fa-flask"></i><span>Stage 4 · Materials</span>
+    </button>
+    <button class="nav-item" data-tab="explain">
+      <i class="fa-solid fa-brain"></i><span>Stage 5 · Explain</span>
+    </button>
+  </nav>
+
+  <div class="nav-bottom">
+    <div class="pipeline-status" id="pipeline-status">
+      <div class="ps-label">Pipeline</div>
+      <div class="ps-dots">
+        <span class="ps-dot" id="dot-1" title="Stage 1: Parse"></span>
+        <span class="ps-dot" id="dot-2" title="Stage 2: Geometry"></span>
+        <span class="ps-dot" id="dot-3" title="Stage 3: 3D"></span>
+        <span class="ps-dot" id="dot-4" title="Stage 4: Materials"></span>
+        <span class="ps-dot" id="dot-5" title="Stage 5: Explain"></span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ Main ═════════════════════════════════════════════════════════════ -->
+<div class="main-wrap">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-title" id="topbar-title">Floor Plan Analyzer</div>
+    <div class="topbar-controls">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="search-input" id="search-input" placeholder="Ask about the plan…"/>
+        <button class="mic-btn" id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content panels -->
+  <div class="content-area">
+
+    <!-- ── TAB: Upload ─────────────────────────────────────────────── -->
+    <section class="tab-panel active" id="tab-upload">
+      <div class="panel-header">
+        <h1>Upload Floor Plan</h1>
+        <p>Drop a digital floor plan image — StructoX will run all 5 pipeline stages automatically.</p>
+      </div>
+
+      <div class="upload-zone" id="drop-zone">
+        <div class="uz-inner" id="uz-inner">
+          <div class="uz-icon"><i class="fa-solid fa-file-image"></i></div>
+          <div class="uz-title">Drag &amp; drop your floor plan</div>
+          <div class="uz-sub">PNG · JPG · BMP · TIFF · WebP — up to 20 MB</div>
+          <input type="file" id="file-input" accept="image/*" hidden/>
+          <button class="btn btn-accent" onclick="document.getElementById('file-input').click()">
+            <i class="fa-solid fa-folder-open"></i> Choose File
+          </button>
+        </div>
+        <div class="uz-preview" id="uz-preview" style="display:none">
+          <img id="img-orig" alt="Original plan"/>
+          <div class="uz-preview-label">Original — ready to process</div>
+          <button class="btn btn-accent" id="btn-run">
+            <i class="fa-solid fa-bolt"></i> Run Pipeline
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-card" id="progress-card" style="display:none">
+        <div class="prog-row"><span class="prog-stage" id="pg-s1">① Parse</span><span class="prog-dot" id="pgd-1"></span></div>
+        <div class="prog-row"><span class="prog-stage" id="pg-s2">② Geometry</span><span class="prog-dot" id="pgd-2"></span></div>
+        <div class="prog-row"><span class="prog-stage" id="pg-s3">③ 3D Model</span><span class="prog-dot" id="pgd-3"></span></div>
+        <div class="prog-row"><span class="prog-stage" id="pg-s4">④ Materials</span><span class="prog-dot" id="pgd-4"></span></div>
+        <div class="prog-row"><span class="prog-stage" id="pg-s5">⑤ Explain</span><span class="prog-dot" id="pgd-5"></span></div>
+      </div>
+
+      <div class="error-bar" id="error-bar" style="display:none">
+        <i class="fa-solid fa-triangle-exclamation"></i><span id="error-text"></span>
+      </div>
+    </section>
+
+    <!-- ── TAB: Stage 1 — Parse ────────────────────────────────────── -->
+    <section class="tab-panel" id="tab-parse">
+      <div class="panel-header">
+        <h1><span class="stage-badge">Stage 1</span> Floor Plan Parser</h1>
+        <p>Wall detection · Room extraction · Opening identification · Junction classification</p>
+      </div>
+      <div id="parse-content">
+        <div class="empty-state"><i class="fa-solid fa-upload"></i><p>Upload a floor plan to begin</p></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: Stage 2 — Geometry ────────────────────────────────── -->
+    <section class="tab-panel" id="tab-geometry">
+      <div class="panel-header">
+        <h1><span class="stage-badge">Stage 2</span> Geometry Reconstruction</h1>
+        <p>Wall graph · Load-bearing classification · Span analysis · Structural concerns</p>
+      </div>
+      <div id="geometry-content">
+        <div class="empty-state"><i class="fa-solid fa-upload"></i><p>Upload a floor plan to begin</p></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: Stage 3 — 3D Model ────────────────────────────────── -->
+    <section class="tab-panel" id="tab-model3d">
+      <div class="panel-header">
+        <h1><span class="stage-badge">Stage 3</span> 3D Structural Model</h1>
+        <p>Extruded walls · Floor &amp; roof slabs · Column placement · Interactive Three.js viewer</p>
+      </div>
+      <div id="model3d-content">
+        <div class="empty-state"><i class="fa-solid fa-cube"></i><p>Upload a floor plan to generate 3D model</p></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: Stage 4 — Materials ───────────────────────────────── -->
+    <section class="tab-panel" id="tab-materials">
+      <div class="panel-header">
+        <h1><span class="stage-badge">Stage 4</span> Material Analysis</h1>
+        <p>Cost–Strength tradeoff scoring · Ranked options per element · Full cost breakdown</p>
+      </div>
+      <div id="materials-content">
+        <div class="empty-state"><i class="fa-solid fa-flask"></i><p>Upload a floor plan to begin</p></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: Stage 5 — Explain ─────────────────────────────────── -->
+    <section class="tab-panel" id="tab-explain">
+      <div class="panel-header">
+        <h1><span class="stage-badge">Stage 5</span> AI Explanation</h1>
+        <p>LLM-generated structural reasoning · Plain-language justifications · Engineer-grade insight</p>
+      </div>
+      <div id="explain-content">
+        <div class="empty-state"><i class="fa-solid fa-brain"></i><p>Upload a floor plan to generate explanations</p></div>
+      </div>
+    </section>
+
+  </div><!-- /content-area -->
+</div><!-- /main-wrap -->
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>
