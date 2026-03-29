@@ -260,19 +260,15 @@ const status=document.getElementById('status')
 const drop=document.getElementById('drop')
 
 fileInput.addEventListener('change',()=>{
-const file=fileInput.files[0]
+    const file = fileInput.files[0];
+    if(!file) return;
 
-if(!file)return
+    // show preview first
+    preview.src = URL.createObjectURL(file);
 
-preview.src=URL.createObjectURL(file)
-
-status.innerText="Running analysis..."
-
-setTimeout(()=>{
-status.innerText="Analysis Complete"
-},3000)
-
-})
+    // send to backend
+    processImage(file);
+});
 
 drop.addEventListener('dragover',e=>{
 e.preventDefault()
@@ -284,21 +280,15 @@ drop.style.borderColor="#ccc"
 })
 
 drop.addEventListener('drop',e=>{
-e.preventDefault()
+    e.preventDefault();
 
-const file=e.dataTransfer.files[0]
+    const file = e.dataTransfer.files[0];
+    fileInput.files = e.dataTransfer.files;
 
-fileInput.files=e.dataTransfer.files
+    preview.src = URL.createObjectURL(file);
 
-preview.src=URL.createObjectURL(file)
-
-status.innerText="Running analysis..."
-
-setTimeout(()=>{
-status.innerText="Analysis Complete"
-},3000)
-
-})
+    processImage(file); 
+});
 
 let recognition=null
 let listening=false
@@ -361,7 +351,31 @@ listening=true
 micBtn.style.background="#ff3b30"
 
 }
+async function processImage(file){
 
+    const formData = new FormData();
+    formData.append("file", file);
+
+    status.innerText = "Processing with AI...";
+
+    try{
+        const response = await fetch("http://127.0.0.1:5000/process", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        // show processed image
+        preview.src = data.image_url;
+
+        status.innerText = "Walls detected: " + data.count;
+
+    }catch(err){
+        status.innerText = "Error processing image";
+        console.error(err);
+    }
+}
 </script>
 
 </body>
