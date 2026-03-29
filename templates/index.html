@@ -1,307 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASIS — Autonomous Structural Intelligence System</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StructoX — AI Structural Intelligence</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:'DM Sans',sans-serif;
+background:#090907;
+color:#170f0f
+}
+
+.container{
+display:flex;
+min-height:100vh
+}
+
+.sidebar{
+width: 100px;
+background:#db9b1b;
+border-right:1px solid #e5e5e5;
+padding:20px
+}
+
+.logo{
+font-weight:700;
+font-size:18px;
+margin-bottom:30px
+}
+
+.nav button{
+display:block;
+width:100%;
+padding:10px;
+border:none;
+background:none;
+text-align:left;
+font-size:14px;
+margin-bottom:6px;
+border-radius:8px;
+cursor:pointer
+}
+
+.nav button:hover{
+background:#f3f3f3
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column
+}
+
+.topbar{
+height:60px;
+background:#000;
+border-bottom:1px solid #222;
+display:flex;
+align-items:center;
+padding:0 25px;
+gap:10px
+}
+
+.search{
+padding:8px 12px;
+border:1px solid #444;
+border-radius:8px;
+width:450px;
+background:#111;
+color:#fff
+}
+
+.content{
+padding:30px
+}
+
+.card{
+background:#fff;
+border:1px solid #e5e5e5;
+border-radius:14px;
+padding:30px
+}
+
+.upload-box{
+border:2px dashed #ccc;
+border-radius:14px;
+padding:40px;
+text-align:center;
+cursor:pointer
+}
+
+.upload-box:hover{
+border-color:#e76f3b
+}
+
+.btn{
+background:#e76f3b;
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px
+}
+
+.preview{
+margin-top:20px;
+max-width:250px
+}
+
+.status{
+margin-top:15px;
+font-size:14px;
+color:#666
+}
+
+.mic-btn{
+display:flex;
+align-items:center;
+justify-content:center;
+background:#e76f3b;
+color:white;
+border:none;
+border-radius:8px;
+padding:8px 12px;
+cursor:pointer;
+font-size:16px
+}
+
+.table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px
+}
+
+.table th,.table td{
+padding:10px;
+border-bottom:1px solid #eee;
+font-size:13px
+}
+
+.tag{
+font-size:11px;
+background:#f0fdf4;
+color:#15803d;
+padding:2px 8px;
+border-radius:6px
+}
+
+</style>
 </head>
+
 <body>
 
-<!-- ── Sidebar ─────────────────────────────────────── -->
-<aside class="sidebar" id="sidebar">
-  <div class="sb-logo">
-    <svg viewBox="0 0 20 20" width="20" height="20" fill="none">
-      <rect x="1" y="1" width="7.5" height="7.5" rx="1.5" fill="#4f46e5"/>
-      <rect x="11.5" y="1" width="7.5" height="7.5" rx="1.5" fill="#4f46e5" opacity="0.5"/>
-      <rect x="1" y="11.5" width="7.5" height="7.5" rx="1.5" fill="#4f46e5" opacity="0.5"/>
-      <rect x="11.5" y="11.5" width="7.5" height="7.5" rx="1.5" fill="#4f46e5" opacity="0.25"/>
-    </svg>
-  </div>
+<div class="container">
 
-  <nav class="sb-nav">
-    <div class="sb-tooltip">
-      <button class="nav-ic active" data-tab="dashboard" onclick="switchTab('dashboard',this)">
-        <svg viewBox="0 0 18 18" width="18" height="18" fill="none">
-          <rect x="2" y="2" width="6" height="6" rx="1.2" fill="#4f46e5"/>
-          <rect x="10" y="2" width="6" height="6" rx="1.2" fill="#4f46e5" opacity="0.4"/>
-          <rect x="2" y="10" width="6" height="6" rx="1.2" fill="#4f46e5" opacity="0.4"/>
-          <rect x="10" y="10" width="6" height="6" rx="1.2" fill="#4f46e5" opacity="0.2"/>
-        </svg>
-      </button>
-      <span class="sb-tip">Dashboard</span>
-    </div>
-    <div class="sb-tooltip">
-      <button class="nav-ic" data-tab="upload" onclick="switchTab('upload',this)">
-        <svg viewBox="0 0 18 18" width="18" height="18" fill="none">
-          <path d="M9 2v10M5 6l4-4 4 4M2 15h14" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <span class="sb-tip">Upload Plan</span>
-    </div>
-    <div class="sb-tooltip">
-      <button class="nav-ic" data-tab="viewer" onclick="switchTab('viewer',this)">
-        <svg viewBox="0 0 18 18" width="18" height="18" fill="none">
-          <rect x="2" y="2" width="14" height="14" rx="2" stroke="#6b7280" stroke-width="1.4"/>
-          <path d="M2 8h14M8 2v14" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="2 2"/>
-        </svg>
-      </button>
-      <span class="sb-tip">3D Viewer</span>
-    </div>
-    <div class="sb-tooltip">
-      <button class="nav-ic" data-tab="materials" onclick="switchTab('materials',this)">
-        <svg viewBox="0 0 18 18" width="18" height="18" fill="none">
-          <path d="M3 14L6 8l4 4 3-5 3 7" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <span class="sb-tip">Materials</span>
-    </div>
-    <div class="sb-tooltip">
-      <button class="nav-ic" data-tab="explain" onclick="switchTab('explain',this)">
-        <svg viewBox="0 0 18 18" width="18" height="18" fill="none">
-          <circle cx="9" cy="9" r="6" stroke="#6b7280" stroke-width="1.4"/>
-          <path d="M9 8v4M9 6h.01" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </button>
-      <span class="sb-tip">Explain AI</span>
-    </div>
-  </nav>
+<div class="sidebar">
+<div class="logo">StructoX</div>
 
-  <div class="sb-divider"></div>
+<div class="nav">
+<button>Dashboard</button>
+<button>Upload Plan</button>
+<button>3D Model</button>
+<button>Materials</button>
+<button>Report</button>
+</div>
+</div>
 
-  <div class="sb-tooltip sb-bottom">
-    <button class="nav-ic">
-      <svg viewBox="0 0 18 18" width="18" height="18" fill="none">
-        <circle cx="9" cy="9" r="3" stroke="#6b7280" stroke-width="1.4"/>
-        <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <span class="sb-tip">Settings</span>
-  </div>
+<div class="main">
 
-  <div class="sb-pulse-wrap sb-tooltip">
-    <div class="pulse-dot"></div>
-    <span class="sb-tip">System ready</span>
-  </div>
-</aside>
+<div class="topbar">
+<input class="search" placeholder="Search plans...">
+<button class="mic-btn" onclick="startVoice()">
+<i class="fa-solid fa-microphone"></i>
+</button>
+</div>
 
-<!-- ── Main Content ────────────────────────────────── -->
-<main class="main">
-  <header class="topbar">
-    <div class="tb-left">
-      <span class="tb-title">Autonomous Structural Intelligence</span>
-      <span class="tb-sep">/</span>
-      <span class="tb-sub" id="tb-context">No plan loaded</span>
-    </div>
-    <div class="tb-right">
-      <span class="pill pill-gray" id="status-pill">Awaiting upload</span>
-      <button class="btn btn-primary" id="btn-load-demo" onclick="loadDemo()">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5C1 3.46 3.46 1 6.5 1S12 3.46 12 6.5 9.54 12 6.5 12" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/><path d="M4.5 6.5h5M7 4.5l2.5 2-2.5 2" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Load Demo
-      </button>
-      <button class="btn" id="btn-export" onclick="exportReport()" disabled>
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3M2 11h9" stroke="#6b7280" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Export JSON
-      </button>
-    </div>
-  </header>
+<div class="content">
 
-  <div class="content" id="content">
+<div class="card">
 
-    <!-- ── TAB: Upload ─────────────────────────────── -->
-    <section class="tab-panel active" id="tab-upload" data-tab="upload">
-      <div class="upload-hero">
-        <div class="upload-zone" id="drop-zone"
-             ondragover="event.preventDefault();this.classList.add('drag-over')"
-             ondragleave="this.classList.remove('drag-over')"
-             ondrop="handleDrop(event)">
-          <div class="upload-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M14 4v15M7 10l7-6 7 6" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M4 21h20" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="upload-title">Drop your floor plan here</div>
-          <div class="upload-sub">PNG or JPG · Clean orthogonal floor plans recommended</div>
-          <label class="btn btn-primary" style="margin-top:16px;cursor:pointer;">
-            Browse File
-            <input type="file" accept=".png,.jpg,.jpeg" style="display:none" onchange="handleFile(this.files[0])"/>
-          </label>
-        </div>
+<h2>Upload Floor Plan</h2>
+<p>Upload an image of the architectural plan.</p>
 
-        <div class="upload-steps">
-          <div class="u-step"><div class="u-num">01</div><div><div class="u-name">Floor Plan Parsing</div><div class="u-desc">OpenCV detects walls, rooms, openings</div></div></div>
-          <div class="u-step"><div class="u-num">02</div><div><div class="u-name">Geometry Reconstruction</div><div class="u-desc">Corner graph, span detection, load-bearing classification</div></div></div>
-          <div class="u-step"><div class="u-num">03</div><div><div class="u-name">2D → 3D Model</div><div class="u-desc">Walls extruded to 3m, Three.js viewer</div></div></div>
-          <div class="u-step"><div class="u-num">04</div><div><div class="u-name">Material Analysis</div><div class="u-desc">Cost × strength tradeoff per element</div></div></div>
-          <div class="u-step"><div class="u-num">05</div><div><div class="u-name">Explainability</div><div class="u-desc">Plain-language reasoning with geometry evidence</div></div></div>
-        </div>
-      </div>
+<div class="upload-box" id="drop">
 
-      <div class="progress-section" id="progress-section" style="display:none;">
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="progress-fill"></div>
-        </div>
-        <div class="progress-label" id="progress-label">Processing…</div>
-      </div>
-    </section>
+<p>Drag & Drop Image or Click</p>
 
-    <!-- ── TAB: Dashboard ─────────────────────────── -->
-    <section class="tab-panel" id="tab-dashboard" data-tab="dashboard">
-      <div class="hero-bar">
-        <div>
-          <div class="hero-title">AI Floor Plan → 3D Model + Material Optimizer</div>
-          <div class="hero-sub">Upload a floor plan to parse walls, reconstruct in 3D, and recommend optimal construction materials with cost–strength tradeoff analysis.</div>
-          <div class="tags" id="hero-tags">
-            <span class="tag tag-blue">OpenCV Parser</span>
-            <span class="tag tag-blue">Three.js 3D</span>
-            <span class="tag tag-amber">Material DB</span>
-            <span class="tag tag-green">LLM Explainer</span>
-            <span class="tag tag-purple">Shapely</span>
-          </div>
-        </div>
-        <button class="btn btn-primary" onclick="switchTab('upload', document.querySelector('[data-tab=upload]'))">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v9M3 5l4-4 4 4M2 12h10" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Upload Plan
-        </button>
-      </div>
+<input type="file" id="file" accept="image/*" hidden>
 
-      <div class="metrics-row" id="metrics-row">
-        <div class="mbox"><div class="mval" id="m-rooms" style="color:#4f46e5">—</div><div class="mlbl">Rooms detected</div></div>
-        <div class="mbox"><div class="mval" id="m-walls" style="color:#0369a1">—</div><div class="mlbl">Wall segments</div></div>
-        <div class="mbox"><div class="mval" id="m-cost"  style="color:#047857">—</div><div class="mlbl">Est. material cost</div></div>
-        <div class="mbox"><div class="mval" id="m-conf"  style="color:#b45309">—</div><div class="mlbl">Parse confidence</div></div>
-      </div>
+<button class="btn" onclick="document.getElementById('file').click()">
+Choose File
+</button>
 
-      <div class="dash-row">
-        <!-- Pipeline -->
-        <div class="dash-col narrow">
-          <div class="sec-lbl">Processing pipeline</div>
-          <div class="pipeline" id="pipeline">
-            <div class="step" data-stage="0"><div class="step-n">1</div><div class="step-body"><div class="step-nm">Floor Plan Parsing</div><div class="step-ds">Wall + room extraction</div></div><div class="step-st">—</div></div>
-            <div class="step" data-stage="1"><div class="step-n">2</div><div class="step-body"><div class="step-nm">Geometry Reconstruction</div><div class="step-ds">Corner graph · spans</div></div><div class="step-st">—</div></div>
-            <div class="step" data-stage="2"><div class="step-n">3</div><div class="step-body"><div class="step-nm">2D → 3D Generation</div><div class="step-ds">Extruded @ 3m height</div></div><div class="step-st">—</div></div>
-            <div class="step" data-stage="3"><div class="step-n">4</div><div class="step-body"><div class="step-nm">Material Analysis</div><div class="step-ds">Cost × strength tradeoff</div></div><div class="step-st">—</div></div>
-            <div class="step" data-stage="4"><div class="step-n">5</div><div class="step-body"><div class="step-nm">Explainability</div><div class="step-ds">LLM summary gen</div></div><div class="step-st">—</div></div>
-          </div>
-          <div class="pb"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
-          <div class="pb-label" id="pb-label">0 / 5 stages</div>
-        </div>
+<img id="preview" class="preview"/>
 
-        <!-- Mini 3D preview -->
-        <div class="dash-col">
-          <div class="sec-lbl">3D model preview <span id="viewer-hint" style="font-weight:400;color:#9ca3af;text-transform:none;letter-spacing:0;">(full viewer in 3D tab)</span></div>
-          <div class="card p0">
-            <div class="viewer-topbar">
-              <span class="mono-sm">ORTHOGRAPHIC · PLAN VIEW</span>
-              <div style="display:flex;gap:5px;">
-                <span class="layer-btn active" id="lw">Walls</span>
-                <span class="layer-btn active" id="ld">Doors</span>
-                <span class="layer-btn" id="lr" onclick="this.classList.toggle('active')">Roof</span>
-              </div>
-            </div>
-            <div id="mini-canvas-wrap" class="mini-canvas-wrap">
-              <div class="mini-placeholder">Upload a floor plan to see the 3D preview</div>
-            </div>
-            <div class="viewer-ctrl">
-              <button class="ctrl-btn" onclick="rotateViewer(-1)">↺ Rotate</button>
-              <button class="ctrl-btn" onclick="zoomViewer(1.2)">⊕ Zoom</button>
-              <button class="ctrl-btn" onclick="zoomViewer(0.8)">⊖ Zoom</button>
-              <button class="ctrl-btn" onclick="resetViewer()">⤢ Reset</button>
-              <span class="mono-sm" style="margin-left:auto;color:#d1d5db;">Three.js r128</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<div id="status" class="status"></div>
 
-    <!-- ── TAB: 3D Viewer ─────────────────────────── -->
-    <section class="tab-panel" id="tab-viewer" data-tab="viewer">
-      <div class="sec-lbl" style="margin-bottom:12px;">Full 3D structural model</div>
-      <div class="card p0">
-        <div class="viewer-topbar">
-          <span class="mono-sm">INTERACTIVE THREE.JS VIEWER · DRAG TO ROTATE · SCROLL TO ZOOM</span>
-          <div style="display:flex;gap:5px;">
-            <span class="layer-btn active" onclick="toggleLayer('walls',this)">Walls</span>
-            <span class="layer-btn active" onclick="toggleLayer('slab',this)">Slab</span>
-            <span class="layer-btn active" onclick="toggleLayer('columns',this)">Columns</span>
-            <span class="layer-btn" onclick="toggleLayer('labels',this)">Labels</span>
-          </div>
-        </div>
-        <div id="threejs-container" style="width:100%;height:520px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;">
-          <div id="threejs-placeholder" style="text-align:center;color:#9ca3af;">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin:0 auto 12px;display:block;"><rect x="4" y="4" width="40" height="40" rx="6" stroke="#d1d5db" stroke-width="2"/><path d="M16 32L24 16l8 16" stroke="#d1d5db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="28" r="2" fill="#d1d5db"/></svg>
-            <div style="font-family:'DM Mono';font-size:13px;">Load a floor plan to render the 3D model</div>
-          </div>
-        </div>
-        <div class="viewer-ctrl">
-          <button class="ctrl-btn" onclick="if(window.viewer3d)viewer3d.controls.autoRotate=!viewer3d.controls.autoRotate">⟳ Auto-rotate</button>
-          <button class="ctrl-btn" onclick="if(window.viewer3d)viewer3d.camera.position.set(15,12,15)">Top view</button>
-          <button class="ctrl-btn" onclick="if(window.viewer3d)viewer3d.camera.position.set(0,20,0)">Ortho top</button>
-          <button class="ctrl-btn" onclick="if(window.viewer3d)viewer3d.resetCamera()">Reset</button>
-        </div>
-      </div>
-    </section>
+</div>
+</div>
 
-    <!-- ── TAB: Materials ─────────────────────────── -->
-    <section class="tab-panel" id="tab-materials" data-tab="materials">
-      <div class="sec-lbl" style="margin-bottom:12px;">Material recommendation dashboard</div>
-      <div class="card p0" style="margin-bottom:20px;">
-        <div style="overflow-x:auto;">
-          <table class="mat-tbl" id="mat-tbl">
-            <thead>
-              <tr>
-                <th>Component</th><th>Recommended</th><th>Alternative</th>
-                <th>Cost</th><th>Strength</th><th>Durability</th><th>Best for</th>
-              </tr>
-            </thead>
-            <tbody id="mat-tbody">
-              <tr><td colspan="7" class="empty-row">Load a floor plan to see material recommendations</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+<div class="card" style="margin-top:20px">
 
-      <div class="dash-row">
-        <div class="dash-col">
-          <div class="sec-lbl">Cost vs. strength tradeoff</div>
-          <div class="card">
-            <div style="position:relative;height:220px;"><canvas id="matChart"></canvas></div>
-            <div class="legend" id="chart-legend">
-              <span class="lgd-i"><span class="lgd-sq" style="background:#3b82f6;"></span>Strength score</span>
-              <span class="lgd-i"><span class="lgd-sq" style="background:#f59e0b;"></span>Cost index</span>
-            </div>
-          </div>
-        </div>
-        <div class="dash-col">
-          <div class="sec-lbl">Material database</div>
-          <div id="mat-db-cards" class="mat-db-grid">
-            <div class="empty-hint">Loading materials database…</div>
-          </div>
-        </div>
-      </div>
-    </section>
+<h3>Material Recommendations</h3>
 
-    <!-- ── TAB: Explain ───────────────────────────── -->
-    <section class="tab-panel" id="tab-explain" data-tab="explain">
-      <div class="sec-lbl" style="margin-bottom:12px;">Explainable AI — structural reasoning</div>
-      <div id="explain-cards">
-        <div class="empty-hint">Load a floor plan to see AI-generated explanations</div>
-      </div>
-    </section>
+<table class="table">
 
-  </div><!-- /content -->
-</main>
+<thead>
+<tr>
+<th>Component</th>
+<th>Material</th>
+<th>Cost</th>
+<th>Tag</th>
+</tr>
+</thead>
 
-<!-- ── Toast ────────────────────────────────────────── -->
-<div id="toast" class="toast"></div>
+<tbody>
 
-<!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="js/viewer3d.js"></script>
-<script src="js/app.js"></script>
+<tr>
+<td>Load Bearing Wall</td>
+<td>Red Brick</td>
+<td>₹280/sq.ft</td>
+<td><span class="tag">Best Value</span></td>
+</tr>
+
+<tr>
+<td>Partition Wall</td>
+<td>AAC Blocks</td>
+<td>₹210/sq.ft</td>
+<td><span class="tag">Lightweight</span></td>
+</tr>
+
+<tr>
+<td>Floor Slab</td>
+<td>RCC</td>
+<td>₹420/sq.ft</td>
+<td><span class="tag">Strong</span></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+
+const fileInput=document.getElementById('file')
+const preview=document.getElementById('preview')
+const status=document.getElementById('status')
+const drop=document.getElementById('drop')
+
+fileInput.addEventListener('change',()=>{
+const file=fileInput.files[0]
+
+if(!file)return
+
+preview.src=URL.createObjectURL(file)
+
+status.innerText="Running analysis..."
+
+setTimeout(()=>{
+status.innerText="Analysis Complete"
+},3000)
+
+})
+
+drop.addEventListener('dragover',e=>{
+e.preventDefault()
+drop.style.borderColor="#e76f3b"
+})
+
+drop.addEventListener('dragleave',()=>{
+drop.style.borderColor="#ccc"
+})
+
+drop.addEventListener('drop',e=>{
+e.preventDefault()
+
+const file=e.dataTransfer.files[0]
+
+fileInput.files=e.dataTransfer.files
+
+preview.src=URL.createObjectURL(file)
+
+status.innerText="Running analysis..."
+
+setTimeout(()=>{
+status.innerText="Analysis Complete"
+},3000)
+
+})
+
+let recognition=null
+let listening=false
+
+function startVoice(){
+
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition
+
+if(!SpeechRecognition){
+alert("Voice recognition not supported in this browser")
+return
+}
+
+if(!recognition){
+
+recognition=new SpeechRecognition()
+
+recognition.lang="en-US"
+recognition.interimResults=false
+recognition.maxAlternatives=1
+
+recognition.onresult=function(event){
+
+const text=event.results[0][0].transcript
+
+document.querySelector(".search").value=text
+
+}
+
+recognition.onend=function(){
+
+listening=false
+document.querySelector(".mic-btn").style.background="#e76f3b"
+
+}
+
+recognition.onerror=function(){
+
+listening=false
+document.querySelector(".mic-btn").style.background="#e76f3b"
+
+}
+
+}
+
+const micBtn=document.querySelector(".mic-btn")
+
+if(listening){
+
+recognition.stop()
+listening=false
+micBtn.style.background="#e76f3b"
+return
+
+}
+
+recognition.start()
+listening=true
+
+micBtn.style.background="#ff3b30"
+
+}
+
+</script>
+
 </body>
 </html>
